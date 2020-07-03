@@ -1,13 +1,39 @@
 {{define "headHTML"}}
 <head>
+    <meta property="og:title" content="Where the cool kids are">
+    <meta property="og:site_name" content="oxide.one">
+    <meta property="og:url" content="https://oxide.one">
+    <meta property="og:description" content="oxide.one is the personal project of Eve Rogers. It's main purpose is for it's creator to learn about hosting services within kubernetes.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://oxide.one/img/logo.png">
+
     <!-- Main CSS -->
     <link rel="stylesheet" href="css/main.css">
     <!-- Main CSS -->
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "oxide.one",
+      "url": "https://oxide.one/",
+      "description": "oxide one is an EU technology stack that develops, maintains and supports kubernetes services.",
+      "logo": "https://oxide.one/img/logo.png",
+      "slogan": "Freedom Forever",
+      "foundingDate": "2019",
+      "founders": [
+        {
+          "@type": "Person",
+          "name": "Eve Rogers"
+        }]
+    }
+    </script>
 </head>
 {{end}}
 
+
 {{define "header"}}
+<title>oxide one - {{ .headerText }}</title>
 <header class="header typewriter">
    <h1 id="headertext">{{ .headerText }}</h1>
 </header>
