@@ -69,7 +69,7 @@ func main() {
 	// maps assets/static to /src
 	router.Static("/css", "static/css")
 	router.Static("/js", "static/js")
-
+	router.Static("/static", "static/meta")
 	// Create a path for the home
 	router.GET("/", func(c *gin.Context) {
 		quote := randQuote(quotes)
