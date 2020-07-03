@@ -1,0 +1,7 @@
+{{define "siteLinks"}}
+<div class="flexbox infowrapper">
+{{range .urlLinks}}
+    <div class="infoitem"><p><a href="{{.URL}}">{{.Name}}</a></p></div>
+{{end}}
+</div>
+{{end}}

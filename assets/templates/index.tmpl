@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+{{template "headHTML"}}
+<body>
+<div class="flexbox container">
+  {{template "header" .}}
+  {{template "siteLinks" .}}
+  <div class="quotebox">{{ .quote }}</div>
+  <div class="heightbox"></div>
+</div>
+{{template "footHTML"}}
+<script src="/js/text.js"></script>
+</body>
+</html>
