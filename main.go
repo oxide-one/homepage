@@ -75,6 +75,7 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		quote := randQuote(quotes)
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
+			"name":       "home",
 			"headerText": "oxide.one",
 			"quote":      quote,
 			"urlLinks":   urlLinks,
@@ -83,6 +84,7 @@ func main() {
 	// About Page
 	router.GET("/about", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "about.tmpl", gin.H{
+			"name":       "about",
 			"headerText": "About",
 			"urlLinks":   urlLinks,
 		})
@@ -90,6 +92,7 @@ func main() {
 	// Contact page
 	router.GET("/contact", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "contact.tmpl", gin.H{
+			"name":       "contact",
 			"headerText": "Contact Me",
 			"urlLinks":   urlLinks,
 		})
@@ -97,6 +100,7 @@ func main() {
 	// Sites Page
 	router.GET("/sites", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "sites.tmpl", gin.H{
+			"name":       "sites",
 			"headerText": "Sites",
 			"urlLinks":   urlLinks,
 		})

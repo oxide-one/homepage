@@ -1,10 +1,10 @@
 {{define "headHTML"}}
 <head>
     <meta charset="UTF-8">
-    <meta property="og:title" content="Where the cool kids are">
+    <meta property="og:title" content="//oxide/{{ .name }}">
     <meta property="og:site_name" content="oxide.one">
     <meta property="og:url" content="https://oxide.one">
-    <meta property="og:description" content="oxide.one is the personal project of Eve Rogers. It's main purpose is for it's creator to learn about hosting services within kubernetes.">
+    <meta property="og:description" content="oxide one is the personal project of Eve Rogers. It's main purpose is for it's creator to learn about hosting services within kubernetes.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://oxide.one/img/logo.png">
     <link rel="icon" type="image/png" href="/img/favicon.ico"/>
@@ -37,7 +37,7 @@
 
 
 {{define "header"}}
-<title>oxide one - {{ .headerText }}</title>
+<title>//oxide/{{ .name }}</title>
 <header class="header typewriter">
    <h1 id="headertext">{{ .headerText }}</h1>
 </header>
