@@ -2,6 +2,9 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
@@ -11,10 +14,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Link Fuck
+// Link Structure
 type Link struct {
 	Name string
 	URL  string
+}
+
+type DataResponse struct {
+	Data []struct {
+		Name       string `json:"name"`
+		Link       string `json:"link"`
+		Status     int    `json:"status"`
+		Enabled    bool   `json:"enabled"`
+		StatusName string `json:"status_name"`
+	} `json:"data"`
 }
 
 var urlLinks = []Link{
@@ -28,6 +41,24 @@ func check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+func getStatus() DataResponse {
+	response, err := http.Get("https://status.oxide.one/api/v1/components")
+	statusresponse := DataResponse{}
+	if err != nil {
+		fmt.Printf("%s", err)
+		os.Exit(1)
+	} else {
+		defer response.Body.Close()
+		contents, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			fmt.Printf("%s", err)
+			os.Exit(1)
+		}
+		json.Unmarshal(contents, &statusresponse)
+	}
+	return statusresponse
 }
 
 func getQuotes() []string {
@@ -99,7 +130,10 @@ func main() {
 	})
 	// Sites Page
 	router.GET("/sites", func(c *gin.Context) {
+		status := getStatus()
+		fmt.Println(status)
 		c.HTML(http.StatusOK, "sites.tmpl", gin.H{
+			"status":     status.Data,
 			"name":       "sites",
 			"headerText": "Sites",
 			"urlLinks":   urlLinks,
