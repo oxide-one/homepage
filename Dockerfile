@@ -12,7 +12,7 @@ COPY main.go .
 ENV CGO_ENABLED=0
 #build the binary with debug information removed
 RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -a -o app main.go
-RUN apk update && apk add upx
+RUN apk update && apk add upx ca-certificates
 RUN upx /build/app
 
 
@@ -20,6 +20,7 @@ FROM scratch
 ENV GIN_MODE=release
 ENV PORT=8000
 COPY --from=build /build/app /app
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY assets /assets
 COPY static /static
 
