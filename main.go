@@ -37,6 +37,23 @@ var urlLinks = []Link{
 	Link{Name: "privacy", URL: "/privacy"},
 }
 
+func getColor(status string) string {
+	var color = "#ffffff"
+	if status == "Operational" {
+		color = "#539440"
+	} else if status == "Partial Outage" {
+		color = "#f0c674"
+	} else if status == "Major Outage" {
+		color = "#cc6666"
+	} else if status == "Unknown" {
+		color = "#81a2be"
+	} else if status == "Performance Issues" {
+		color = "#b294bb"
+	}
+	fmt.Println(color)
+	return color
+}
+
 func check(e error) {
 	if e != nil {
 		panic(e)
@@ -131,7 +148,6 @@ func main() {
 	// Sites Page
 	router.GET("/sites", func(c *gin.Context) {
 		status := getStatus()
-		fmt.Println(status)
 		c.HTML(http.StatusOK, "sites.tmpl", gin.H{
 			"status":     status.Data,
 			"name":       "sites",

@@ -7,28 +7,23 @@
   {{template "header" .}}
   <div class="flexbox infowrapper" style="text-align: left">
     <div class="infoitem" style="text-align: left">
-    <p>Below are a list of my sites with their status.<br>
-    </p>
+    <p>Below are a list of my sites with their status.<br></p>
+    <table class="sites">
     {{range .status }}
-    <p>
-    {{if eq .StatusName "Operational"}}
-    <i data-feather="arrow-up" stroke="#539440"></i>
+    <tr>
+    <th class="sites">
+      <a href="{{ .Link }}" title="{{ .StatusName}}" style="text-decoration: none">{{ .Name }}</a>
+    </th>
+    {{if eq .StatusName "Operational"}}<th class="status" style="color: #539440">{{end}}
+    {{if eq .StatusName "Partial Outage"}}<th class="status" style="color: #f0c674">{{end}}
+    {{if eq .StatusName "Major Outage"}}<th class="status" style="color: #cc6666">{{end}}
+    {{if eq .StatusName "Unknown"}}<th class="status" style="color: #81a2be">{{end}}
+    {{if eq .StatusName "Performance Issues"}}<th class="status" style="color: #b294bb">{{end}}
+    {{ .StatusName}}
+    </th>
+    </tr>
     {{end}}
-    {{if eq .StatusName "Partial Outage"}}
-    <i data-feather="arrow-down" stroke="#f0c674"></i>
-    {{end}}
-    {{if eq .StatusName "Major Outage"}}
-    <i data-feather="arrow-down" stroke="#cc6666"></i>
-    {{end}}
-    {{if eq .StatusName "Unknown"}}
-    <i data-feather="help-circle" stroke="#81a2be"></i>
-    {{end}}
-    {{if eq .StatusName "Performance Issues"}}
-    <i data-feather="activity" stroke="#b294bb"></i>
-    {{end}}
-    <a href="{{ .Link }}" title="{{ .StatusName}}">{{ .Name }}</a>
-    </p>
-    {{end}}
+  </table>
     </div>
   </div>
   <div class="infoitem"><p><a href="/">home</a></p></div>
@@ -36,9 +31,5 @@
 </div>
 {{template "footHTML"}}
 <script src="/js/text.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
-<script>
-  feather.replace()
-</script>
 </body>
 </html>

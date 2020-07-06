@@ -10,7 +10,7 @@ html, body {
     background-color: #181c20;
     margin: 0;
     cursor: default;
-    -webkit-user-select: none; /* Safari */        
+    -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
@@ -66,6 +66,19 @@ p { margin: 3pt; font-size: 20pt; }
 
 .contact {
     text-align: left;
+}
+
+.sites {
+  width: 100%;
+  font-weight: 300;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.status {
+  text-align: right;
+  vertical-align: middle;
+  font-size: 12pt;
 }
 
 @media all and (max-width: 700px) { .infowrapper { flex-direction: column wrap; } .quotebox { max-width: 80vw; } .infoitem { max-width: 90vw; }}
