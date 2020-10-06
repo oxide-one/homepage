@@ -7,22 +7,37 @@
   {{template "header" .}}
   <div class="flexbox infowrapper" style="text-align: left">
     <div class="infoitem" style="text-align: left">
-    <p>Below are a list of my sites with their status.<br></p>
-    <table class="sites">
+    <!--<p>Below are a list of my sites with their status.<br></p>!-->
+    <table>
+      <caption><p>Below are a list of my sites with their service status.</p></caption>
     {{range .status }}
     <tr>
+      <th><a href="{{ .URL }}" title="{{ .FriendlyName }}" style="text-decoration: none">{{ .FriendlyName }}</a></th>
+      <th class="status" style="padding-left: 30pt"><a style="text-decoration: none" title="uptime taken over 7 days">uptime: {{ .CustomUptimeRanges }}%</a></th>
+      <th style="padding-left: 10pt"></th>
+      {{if eq .Status 2 }}<th class="status" style="color: #539440; padding-right: 15pt">Up{{end}}
+      {{if eq .Status 8 }}<th class="status" style="color: #f0c674; padding-right: 30pt">Seems Down{{end}}
+      {{if eq .Status 9 }}<th class="status" style="color: #cc6666; padding-right: 30pt">Down{{end}}
+      </th>
+    </tr>
+
+    {{end}}
+    </table>
+    <!--
+    <table class="sites" style="width: 90%">
+    <caption></caption>
+     {{range .status }}
+    <tr>
     <th class="sites">
-      <a href="{{ .Link }}" title="{{ .StatusName}}" style="text-decoration: none">{{ .Name }}</a>
+      <a href="{{ .URL }}" title="{{ .FriendlyName }}" style="text-decoration: none">{{ .FriendlyName }}</a>
     </th>
-    {{if eq .StatusName "Operational"}}<th class="status" style="color: #539440">{{end}}
-    {{if eq .StatusName "Partial Outage"}}<th class="status" style="color: #f0c674">{{end}}
-    {{if eq .StatusName "Major Outage"}}<th class="status" style="color: #cc6666">{{end}}
-    {{if eq .StatusName "Unknown"}}<th class="status" style="color: #81a2be">{{end}}
-    {{if eq .StatusName "Performance Issues"}}<th class="status" style="color: #b294bb">{{end}}
-    {{ .StatusName}}
+    <th class="status" style="text-align: left; width: 100%; font-size: 8pt">uptime (7d): {{ .CustomUptimeRanges }}%</th>
+    {{if eq .Status 2 }}<th class="status" style="color: #539440">Up{{end}}
+    {{if eq .Status 8 }}<th class="status" style="color: #f0c674">Seems Down{{end}}
+    {{if eq .Status 9 }}<th class="status" style="color: #cc6666">Down{{end}}
     </th>
     </tr>
-    {{end}}
+    {{end}} -->
   </table>
     </div>
   </div>

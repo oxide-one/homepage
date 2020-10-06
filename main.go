@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -21,13 +22,12 @@ type Link struct {
 }
 
 type DataResponse struct {
-	Data []struct {
-		Name       string `json:"name"`
-		Link       string `json:"link"`
-		Status     int    `json:"status"`
-		Enabled    bool   `json:"enabled"`
-		StatusName string `json:"status_name"`
-	} `json:"data"`
+	Monitors []struct {
+		FriendlyName       string `json:"friendly_name"`
+		URL                string `json:"url"`
+		Status             int    `json:"status"`
+		CustomUptimeRanges string `json:"custom_uptime_ranges"`
+	} `json:"monitors"`
 }
 
 var urlLinks = []Link{
@@ -37,35 +37,46 @@ var urlLinks = []Link{
 	Link{Name: "privacy", URL: "/privacy"},
 }
 
-func getColor(status string) string {
-	var color = "#ffffff"
-	if status == "Operational" {
-		color = "#539440"
-	} else if status == "Partial Outage" {
-		color = "#f0c674"
-	} else if status == "Major Outage" {
-		color = "#cc6666"
-	} else if status == "Unknown" {
-		color = "#81a2be"
-	} else if status == "Performance Issues" {
-		color = "#b294bb"
-	}
-	fmt.Println(color)
-	return color
-}
-
 func check(e error) {
 	if e != nil {
 		panic(e)
 	}
 }
 
-func getStatus() DataResponse {
-	response, err := http.Get("https://status.oxide.one/api/v1/components")
+var lastChecked = time.Now().Add(-10 * time.Minute)
+var lastStatus DataResponse
+
+func getStatus(apiKey string) DataResponse {
+	// Figure out if the time difference is over 10 minutes
+	timeSince := time.Since(lastChecked)
+	if timeSince <= time.Minute*10 {
+		return lastStatus
+	}
+	// Figure out what date is today
+	now := time.Now()
+
+	// Get today's date in Epoch time
+	nowSecs := now.Unix()
+	// Figure out what date was yesterday
+	past := now.AddDate(0, 0, -7)
+	// Get 7 days ago in Epoch time
+	pastSecs := past.Unix()
+
+	// Set the URL for uptimerobot
+	url := "https://api.uptimerobot.com/v2/getMonitors"
+
+	payload := strings.NewReader(fmt.Sprintf("api_key=%s&format=json&custom_uptime_ranges=%d_%d", apiKey, pastSecs, nowSecs))
+
+	req, _ := http.NewRequest("POST", url, payload)
+
+	req.Header.Add("content-type", "application/x-www-form-urlencoded")
+	req.Header.Add("cache-control", "no-cache")
+
+	response, err := http.DefaultClient.Do(req)
 	statusresponse := DataResponse{}
 	if err != nil {
 		fmt.Printf("%s", err)
-		os.Exit(1)
+		//os.Exit(1)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
@@ -75,6 +86,9 @@ func getStatus() DataResponse {
 		}
 		json.Unmarshal(contents, &statusresponse)
 	}
+	// Set the cache status
+	lastChecked = time.Now()
+	lastStatus = statusresponse
 	return statusresponse
 }
 
@@ -105,11 +119,23 @@ func randQuote(quotes []string) string {
 	return quote
 }
 
+func getAPIKey() string {
+	// Checking that the env var "API_KEY" is present.
+	apiKey, ok := os.LookupEnv("API_KEY")
+	if !ok {
+		log.Fatal("API_KEY IS NOT SET")
+	}
+	return apiKey
+}
+
 func main() {
 	quotes := getQuotes()
 	// Initialize a new instance of gin.
 	// := is shorthand for var router = gin.Default()
 	router := gin.Default()
+
+	// Grab environment variables
+	apiKey := getAPIKey()
 
 	// Glob all files within assets/templates
 	router.LoadHTMLGlob("assets/templates/*")
@@ -147,9 +173,9 @@ func main() {
 	})
 	// Sites Page
 	router.GET("/sites", func(c *gin.Context) {
-		status := getStatus()
+		status := getStatus(apiKey)
 		c.HTML(http.StatusOK, "sites.tmpl", gin.H{
-			"status":     status.Data,
+			"status":     status.Monitors,
 			"name":       "sites",
 			"headerText": "Sites",
 			"urlLinks":   urlLinks,
