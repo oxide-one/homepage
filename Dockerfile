@@ -12,8 +12,8 @@ COPY main.go .
 ENV CGO_ENABLED=0
 #build the binary with debug information removed
 RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -a -o app main.go
-RUN apk update && apk add upx ca-certificates
-RUN upx /build/app
+#RUN apk update && apk add upx ca-certificates
+#RUN upx /build/app
 
 
 FROM scratch
