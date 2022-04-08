@@ -3,7 +3,7 @@ module github.com/okamidash/web-oxide.one
 go 1.14
 
 require (
-	github.com/gin-gonic/gin v1.7.0
+	github.com/gin-gonic/gin v1.7.7
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
